@@ -28,13 +28,13 @@ RUN source ~/.bashrc
 ENV PATH /root/miniconda/bin:$PATH
 RUN conda config --set always_yes yes
 RUN conda update -q conda
-RUN conda create -n DAMLA python=3.6 pip numpy scipy pandas matplotlib seaborn scikit-learn hdf5 pytables pillow jupyter
+RUN conda create -n DAMLA python=3.6 pip numpy scipy pandas matplotlib seaborn scikit-learn hdf5 h5py pytables pillow jupyter
 
 # This all gets run in a new shell when the DAMLA venv is activated
 RUN source activate DAMLA \
     && conda env list \
     && pip install --upgrade pip \
-    && conda install -c conda-forge libiconv jupyter_contrib_nbextensions \
+    && conda install -c conda-forge keras libiconv jupyter_contrib_nbextensions \
     && conda install pytorch-cpu -c pytorch \
     && pip install tensorflow \
     && source deactivate
