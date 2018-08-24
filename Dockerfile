@@ -22,21 +22,35 @@ RUN bash miniconda.sh -b -p $HOME/miniconda
 RUN echo ""  >> ~/.bashrc \
     && echo "# added by Miniconda3 installer"  >> ~/.bashrc \
     && echo 'export PATH="/root/miniconda/bin:$PATH"' >> ~/.bashrc
-RUN source ~/.bashrc
 
 # Create DAMLA environment
 ENV PATH /root/miniconda/bin:$PATH
 RUN conda config --set always_yes yes
 RUN conda update -q conda
-RUN conda create -n DAMLA python=3.6 pip numpy scipy pandas matplotlib seaborn scikit-learn hdf5 h5py pytables pillow jupyter
+RUN conda create -n DAMLA python=3.6 pip \
+  numpy \
+  scipy \
+  pandas \
+  matplotlib \
+  seaborn \
+  scikit-learn \
+  hdf5 \
+  h5py \
+  pytables \
+  pillow \
+  jupyter \
+  pytest
 
 # This all gets run in a new shell when the DAMLA venv is activated
 RUN source activate DAMLA \
     && conda env list \
     && pip install --upgrade pip \
-    && conda install -c conda-forge keras libiconv jupyter_contrib_nbextensions \
+    && conda install -c conda-forge keras \
+       libiconv \
+       jupyter_contrib_nbextensions \
     && conda install pytorch-cpu -c pytorch \
     && pip install tensorflow \
+       papermill \
     && source deactivate
 
 RUN conda config --set always_yes no
@@ -44,7 +58,6 @@ RUN conda config --set always_yes no
 RUN rm miniconda.sh
 
 RUN echo ". /root/miniconda/etc/profile.d/conda.sh" >> ~/.bashrc
-ENV conda activate DAMLA
 
 WORKDIR /root
 VOLUME ["/root"]
