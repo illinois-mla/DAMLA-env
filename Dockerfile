@@ -6,6 +6,8 @@ ENV HOME /root
 WORKDIR /root
 
 ENV DEBIAN_FRONTEND noninteractive
+# Have Docker use Bash throughout
+SHELL ["/bin/bash", "-c"]
 
 # Install general dependencies
 RUN apt-get -y -qq update
@@ -20,23 +22,29 @@ RUN bash miniconda.sh -b -p $HOME/miniconda
 RUN echo ""  >> ~/.bashrc \
     && echo "# added by Miniconda3 installer"  >> ~/.bashrc \
     && echo 'export PATH="/root/miniconda/bin:$PATH"' >> ~/.bashrc
-RUN /bin/bash -c "source ~/.bashrc"
+RUN source ~/.bashrc
 
 # Create DAMLA environment
 ENV PATH /root/miniconda/bin:$PATH
 RUN conda config --set always_yes yes
 RUN conda update -q conda
 RUN conda create -n DAMLA python=3.6 pip numpy scipy pandas matplotlib seaborn scikit-learn hdf5 pytables pillow jupyter
-RUN /bin/bash -c "source activate DAMLA"
-RUN pip install --upgrade pip
-RUN conda install -c conda-forge libiconv jupyter_contrib_nbextensions
-RUN conda install pytorch-cpu -c pytorch
-RUN pip install wpca autograd tensorflow
 
-RUN /bin/bash -c "source deactivate"
+# This all gets run in a new shell when the DAMLA venv is activated
+RUN source activate DAMLA \
+    && conda env list \
+    && pip install --upgrade pip \
+    && conda install -c conda-forge libiconv jupyter_contrib_nbextensions \
+    && conda install pytorch-cpu -c pytorch \
+    && pip install tensorflow \
+    && source deactivate
+
 RUN conda config --set always_yes no
 
 RUN rm miniconda.sh
+
+RUN echo ". /root/miniconda/etc/profile.d/conda.sh" >> ~/.bashrc
+ENV conda activate DAMLA
 
 WORKDIR /root
 VOLUME ["/root"]
