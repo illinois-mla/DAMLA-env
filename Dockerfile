@@ -16,6 +16,11 @@ RUN apt-get -y -qq update
 RUN apt-get -y -qq upgrade
 RUN apt-get -y -qq install curl wget vim emacs git
 
+RUN echo ""  >> ~/.bashrc \
+    && echo "# as this is Ubuntu use C.UTF-8"  >> ~/.bashrc \
+    && echo "export LC_ALL=C.UTF-8" >> ~/.bashrc \
+    && echo "export LANG=C.UTF-8" >> ~/.bashrc
+
 # Install miniconda
 RUN wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
 RUN bash miniconda.sh -b -p $HOME/miniconda
