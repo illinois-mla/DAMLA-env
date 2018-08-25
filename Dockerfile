@@ -58,6 +58,15 @@ RUN source activate DAMLA \
        papermill \
     && source deactivate
 
+# Have Jupyter notebooks launch without command line options
+RUN source activate DAMLA \
+    && jupyter notebook --generate-config \
+    && sed -i -e "/allow_root/ a c.NotebookApp.allow_root = True" ~/.jupyter/jupyter_notebook_config.py \
+    && sed -i -e "/custom_display_url/ a c.NotebookApp.custom_display_url = \'http://localhost:8888\'" ~/.jupyter/jupyter_notebook_config.py \
+    && sed -i -e "/c.NotebookApp.ip/ a c.NotebookApp.ip = '0.0.0.0'" ~/.jupyter/jupyter_notebook_config.py \
+    && sed -i -e "/open_browser/ a c.NotebookApp.open_browser = False" ~/.jupyter/jupyter_notebook_config.py \
+    && source deactivate
+
 RUN conda config --set always_yes no
 
 RUN rm miniconda.sh
