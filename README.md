@@ -19,6 +19,7 @@ Docker image for the recommended Conda based environment for the Data Analysis a
 - [pillow](https://github.com/python-pillow/Pillow)
 - [scikit-learn](https://github.com/scikit-learn/scikit-learn)
 - [tensorflow](https://github.com/tensorflow/tensorflow)
+- [tensorflow-probability](https://github.com/tensorflow/probability)
 - [keras](https://github.com/keras-team/keras)
 - [pytorch](https://github.com/pytorch/pytorch)
 - [jupyter](https://github.com/jupyter)

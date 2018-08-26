@@ -56,6 +56,7 @@ RUN source activate DAMLA \
     && conda install -c astropy emcee \
     && conda install pytorch-cpu -c pytorch \
     && pip install tensorflow \
+       tensorflow-probability \
        papermill \
        autograd \
     && source deactivate
