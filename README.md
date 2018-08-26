@@ -29,3 +29,67 @@ Docker image for the recommended Conda based environment for the Data Analysis a
 
 - [Conda](https://conda.io/docs/)
 - [HDF5](https://support.hdfgroup.org/HDF5/)
+
+## Suggested Use
+
+### Running
+
+To use the Docker image first [pull](https://docs.docker.com/engine/reference/commandline/pull/) it down from Docker Hub
+
+```
+docker pull illinoismla/damla-env
+```
+
+and then [run](https://docs.docker.com/engine/reference/commandline/run/) the image in a container while [exposing](https://docs.docker.com/engine/reference/run/#expose-incoming-ports) the container's internal port `8888` with the `-p` flag (this is necessary for Jupyter to be able to talk to the `localhost`)
+
+```
+docker run -it -p 8888:8888 illinoismla/damla-env /bin/bash
+```
+
+Once inside the container activate the DAMLA Conda environment
+
+```
+conda activate DAMLA
+```
+
+### Using for work
+
+If you want anything you do in the container to safely persist then you should bindmount your local machine's file system to the container as a [volume](https://docs.docker.com/storage/volumes/).
+
+As an example, running the image with
+
+```
+docker run --rm -it -v $PWD:/root/data -p 8888:8888 illinoismla/damla-env /bin/bash
+```
+
+runs the container and bindmounts the current directory on the local host (`$PWD`) to the path `/root/data` in the container. This is now a shared space between the local machine and the container so that the files there are **the same**.
+
+To verify this for yourself, in another terminal on your local machine create a new file
+
+```
+# local machine
+touch hello.txt
+```
+
+if you now navigate to `/root/data` in your container and `ls` you should see the file. If you now edit the file inside the container
+
+```
+# container
+echo "hello from the inside the container" >> hello.txt
+```
+
+then on the local machine you see that the file has been changed as expected
+
+```
+# local machine
+cat hello.txt
+# hello from the inside the container
+```
+
+If you now exit the container, the container is [removed](https://docs.docker.com/engine/reference/commandline/rm/) as the [clean up](https://docs.docker.com/engine/reference/run/#clean-up---rm) flag `--rm` was used. However, the files on the local machine have persisted
+
+```
+# local machine
+ls hello.txt
+# hello.txt
+```
