@@ -24,6 +24,8 @@ Docker image for the recommended Conda based environment for the Data Analysis a
 - [jupyter](https://github.com/jupyter)
 - [pytest](https://github.com/pytest-dev/pytest/)
 - [papermill](https://github.com/nteract/papermill)
+- [autograd](https://github.com/HIPS/autograd)
+- [emcee](https://github.com/dfm/emcee)
 
 ### Additional software
 

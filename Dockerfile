@@ -53,9 +53,11 @@ RUN source activate DAMLA \
     && conda install -c conda-forge keras \
        libiconv \
        jupyter_contrib_nbextensions \
+    && conda install -c astropy emcee \
     && conda install pytorch-cpu -c pytorch \
     && pip install tensorflow \
        papermill \
+       autograd \
     && source deactivate
 
 # Have Jupyter notebooks launch without command line options
