@@ -83,6 +83,11 @@ RUN source activate DAMLA \
     && cd .. \
     && source deactivate
 
+# Cleanup to save space
+RUN source activate DAMLA \
+    && conda clean -a \
+    && source deactivate
+
 # Have Jupyter notebooks launch without command line options
 RUN source activate DAMLA \
     && jupyter notebook --generate-config \
