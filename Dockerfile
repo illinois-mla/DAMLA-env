@@ -14,7 +14,12 @@ RUN apt-get -y -qq update
 RUN apt-get -y -qq install apt-utils
 RUN apt-get -y -qq update
 RUN apt-get -y -qq upgrade
-RUN apt-get -y -qq install curl wget vim emacs git
+RUN apt-get -y -qq install curl \
+   wget \
+   vim \
+   emacs \
+   git \
+   libgl1-mesa-glx
 
 RUN echo ""  >> ~/.bashrc \
     && echo "# as this is Ubuntu use C.UTF-8"  >> ~/.bashrc \
@@ -53,12 +58,29 @@ RUN source activate DAMLA \
     && conda install -c conda-forge keras \
        libiconv \
        jupyter_contrib_nbextensions \
-    && conda install -c astropy emcee \
+    && conda install -c astropy \
+       emcee \
+       astroml \
     && conda install pytorch-cpu -c pytorch \
-    && pip install tensorflow \
+    && pip install wpca \
+       tensorflow \
        tensorflow-probability \
        papermill \
        autograd \
+    && source deactivate
+
+# Install the mls package from the course syllabus repo
+RUN source activate DAMLA \
+    && mkdir src \
+    && cd src \
+    && git init \
+    && git config core.sparseCheckout true \
+    && git remote add -f origin https://github.com/illinois-mla/syllabus \
+    && echo "mls" >> .git/info/sparse-checkout \
+    && echo "setup.py" >> .git/info/sparse-checkout \
+    && git checkout master \
+    && pip install . --upgrade \
+    && cd .. \
     && source deactivate
 
 # Have Jupyter notebooks launch without command line options
