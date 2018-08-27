@@ -77,9 +77,10 @@ RUN source activate DAMLA \
     && git config core.sparseCheckout true \
     && git remote add -f origin https://github.com/illinois-mla/syllabus \
     && echo "mls" >> .git/info/sparse-checkout \
+    && echo "MANIFEST.in" >> .git/info/sparse-checkout \
     && echo "setup.py" >> .git/info/sparse-checkout \
     && git checkout master \
-    && pip install . --upgrade \
+    && pip install --upgrade . \
     && cd .. \
     && source deactivate
 
