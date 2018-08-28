@@ -66,6 +66,7 @@ RUN source activate DAMLA \
        tensorflow \
        tensorflow-probability \
        papermill \
+       daft \
        autograd \
     && source deactivate
 
