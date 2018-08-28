@@ -100,7 +100,7 @@ RUN source activate DAMLA \
 
 RUN conda config --set always_yes no
 
-RUN rm miniconda.sh
+RUN rm miniconda.sh && rm -rf /root/src
 
 RUN echo ". /root/miniconda/etc/profile.d/conda.sh" >> ~/.bashrc
 
