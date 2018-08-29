@@ -36,7 +36,7 @@ RUN echo ""  >> ~/.bashrc \
 # Create DAMLA environment
 ENV PATH /root/miniconda/bin:$PATH
 RUN conda config --set always_yes yes
-RUN conda update -q conda
+RUN conda update -n base -c defaults -q conda
 RUN conda create -n DAMLA python=3.6 pip \
   numpy \
   scipy \
