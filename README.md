@@ -23,6 +23,7 @@ Docker image for the recommended Conda based environment for the Data Analysis a
 - [keras](https://github.com/keras-team/keras)
 - [pytorch](https://github.com/pytorch/pytorch)
 - [jupyter](https://github.com/jupyter)
+- [nbdime](https://github.com/jupyter/nbdime)
 - [pytest](https://github.com/pytest-dev/pytest/)
 - [papermill](https://github.com/nteract/papermill)
 - [daft](https://github.com/dfm/daft)

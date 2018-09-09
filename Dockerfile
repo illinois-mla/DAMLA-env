@@ -65,6 +65,7 @@ RUN source activate DAMLA \
     && pip install wpca \
        tensorflow \
        tensorflow-probability \
+       nbdime \
        papermill \
        daft \
        autograd \
