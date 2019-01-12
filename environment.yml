@@ -1,0 +1,29 @@
+name: DAMLA
+channels:
+  - defaults
+dependencies:
+  - python=3.6
+  - pip>=18.0
+  - setuptools<=39.1.0 # for tensorflow
+  - wheel>=0.31.1
+  - numpy
+  - scipy
+  - pandas
+  - matplotlib
+  - seaborn
+  - scikit-learn
+  - hdf5
+  - h5py
+  - pytables
+  - pillow
+  - jupyter
+  - pytest
+  # Below is essentially the contents of a requirements.txt
+  - pip:
+    - wpca
+    - tensorflow
+    - tensorflow-probability
+    - nbdime
+    - papermill
+    - daft
+    - autograd
