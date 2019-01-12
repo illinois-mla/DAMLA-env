@@ -107,10 +107,13 @@ RUN conda config --set always_yes no
 
 RUN rm -rf /root/src
 
-RUN echo ". /root/miniconda/etc/profile.d/conda.sh" >> ~/.bashrc
+RUN echo ". /root/miniconda/etc/profile.d/conda.sh" >> ~/.bashrc && \
+    echo ""  >> ~/.bashrc && \
+    echo "# have DAMLA be default environment"  >> ~/.bashrc && \
+    echo "conda activate DAMLA" >> ~/.bashrc
 
 WORKDIR ${HOME}/data
 VOLUME ["/root"]
 
 # Start the container inside the conda environment
-ENTRYPOINT ["/bin/bash && conda activate DAMLA"]
+ENTRYPOINT ["/bin/bash"]
