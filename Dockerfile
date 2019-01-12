@@ -45,7 +45,7 @@ RUN conda config --set always_yes yes && \
     conda update -n base -c defaults -q conda && \
     conda env create -f environment.yml && \
     rm environment.yml && \
-    conda clean -a
+    conda clean -ilts
 
 # This all gets run in a new shell when the DAMLA venv is activated
 # Add packages from additional channels and install mls from GitHub
@@ -60,7 +60,7 @@ RUN source activate DAMLA && \
        astroml && \
     conda install pytorch-cpu -c pytorch && \
     pip install git+https://github.com/dkirkby/MachineLearningStatistics#egg=mls && \
-    conda clean -a && \
+    conda clean -ilts && \
     source deactivate
 
 # Have Jupyter notebooks launch without command line options
