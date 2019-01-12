@@ -48,31 +48,19 @@ RUN conda config --set always_yes yes && \
     conda clean -a
 
 # This all gets run in a new shell when the DAMLA venv is activated
+# Add packages from additional channels and install mls from GitHub
 RUN source activate DAMLA && \
     conda env list && \
-    conda install -c conda-forge keras \
+    conda install -c conda-forge \
+       keras \
        libiconv \
        jupyter_contrib_nbextensions && \
     conda install -c astropy \
        emcee \
        astroml && \
     conda install pytorch-cpu -c pytorch && \
+    pip install git+https://github.com/dkirkby/MachineLearningStatistics#egg=mls && \
     conda clean -a && \
-    source deactivate
-
-# Install the mls package from the course syllabus repo
-RUN source activate DAMLA && \
-    mkdir src && \
-    cd src && \
-    git init && \
-    git config core.sparseCheckout true && \
-    git remote add -f origin https://github.com/illinois-mla/syllabus && \
-    echo "mls" >> .git/info/sparse-checkout && \
-    echo "MANIFEST.in" >> .git/info/sparse-checkout && \
-    echo "setup.py" >> .git/info/sparse-checkout && \
-    git checkout master && \
-    pip install --upgrade --no-cache-dir . && \
-    cd .. && \
     source deactivate
 
 # Have Jupyter notebooks launch without command line options
