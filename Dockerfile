@@ -57,14 +57,6 @@ RUN source activate DAMLA && \
        emcee \
        astroml && \
     conda install pytorch-cpu -c pytorch && \
-    pip install --no-cache-dir \
-       wpca \
-       tensorflow \
-       tensorflow-probability \
-       nbdime \
-       papermill \
-       daft \
-       autograd && \
     conda clean -a && \
     source deactivate
 
