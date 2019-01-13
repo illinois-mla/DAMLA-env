@@ -51,13 +51,23 @@ docker pull illinoismla/damla-env
 and then [run](https://docs.docker.com/engine/reference/commandline/run/) the image in a container while [exposing](https://docs.docker.com/engine/reference/run/#expose-incoming-ports) the container's internal port `8888` with the `-p` flag (this is necessary for Jupyter to be able to talk to the `localhost`)
 
 ```
-docker run -it -p 8888:8888 illinoismla/damla-env /bin/bash
+docker run -it -p 8888:8888 illinoismla/damla-env
 ```
 
-Once inside the container activate the DAMLA Conda environment
+Once inside the container activate note that the DAMLA Conda environment is already activated and should be shown in the terminal prompt
 
 ```
-conda activate DAMLA
+(DAMLA) root@<hostname>:~/data#
+```
+
+though you can also verify this by listing the conda environments
+
+```
+conda env list
+# conda environments:
+#
+base                     /root/miniconda
+DAMLA                 *  /root/miniconda/envs/DAMLA
 ```
 
 ### Using for work
@@ -67,7 +77,7 @@ If you want anything you do in the container to safely persist then you should b
 As an example, running the image with
 
 ```
-docker run --rm -it -v $PWD:/root/data -p 8888:8888 illinoismla/damla-env /bin/bash
+docker run --rm -it -v $PWD:/root/data -p 8888:8888 illinoismla/damla-env
 ```
 
 runs the container and bindmounts the current directory on the local host (`$PWD`) to the path `/root/data` in the container. This is now a shared space between the local machine and the container so that the files there are **the same**.
