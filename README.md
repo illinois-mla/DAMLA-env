@@ -5,6 +5,7 @@ Docker image for the recommended Conda based environment for the Data Analysis a
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Docker Automated build](https://img.shields.io/docker/automated/illinoismla/damla-env.svg)](https://hub.docker.com/r/illinoismla/damla-env/)
 [![Docker Build Status](https://img.shields.io/docker/build/illinoismla/damla-env.svg)](https://hub.docker.com/r/illinoismla/damla-env/builds/)
+[![download-size number-of-layers](https://images.microbadger.com/badges/image/illinoismla/damla-env.svg)](https://microbadger.com/images/illinoismla/damla-env)
 
 ## Environment
 
