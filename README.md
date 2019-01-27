@@ -58,7 +58,7 @@ docker run -it -p 8888:8888 illinoismla/damla-env
 Once inside the container activate note that the DAMLA Conda environment is already activated and should be shown in the terminal prompt
 
 ```
-(DAMLA) root@<hostname>:~/data#
+(DAMLA) physicist@<hostname>:~/data$
 ```
 
 though you can also verify this by listing the conda environments
@@ -67,8 +67,8 @@ though you can also verify this by listing the conda environments
 conda env list
 # conda environments:
 #
-base                     /root/miniconda
-DAMLA                 *  /root/miniconda/envs/DAMLA
+base                     /opt/miniconda
+DAMLA                 *  /opt/miniconda/envs/DAMLA
 ```
 
 ### Using for work
@@ -78,10 +78,10 @@ If you want anything you do in the container to safely persist then you should b
 As an example, running the image with
 
 ```
-docker run --rm -it -v $PWD:/root/data -p 8888:8888 illinoismla/damla-env
+docker run --rm -it -v $PWD:/home/physicist/data -p 8888:8888 illinoismla/damla-env
 ```
 
-runs the container and bindmounts the current directory on the local host (`$PWD`) to the path `/root/data` in the container. This is now a shared space between the local machine and the container so that the files there are **the same**.
+runs the container and bindmounts the current directory on the local host (`$PWD`) to the path `/home/physicist/data` in the container. This is now a shared space between the local machine and the container so that the files there are **the same**.
 
 To verify this for yourself, in another terminal on your local machine create a new file
 
@@ -90,7 +90,7 @@ To verify this for yourself, in another terminal on your local machine create a 
 touch hello.txt
 ```
 
-if you now navigate to `/root/data` in your container and `ls` you should see the file. If you now edit the file inside the container
+if you now navigate to `/home/physicist/data` in your container and `ls` you should see the file. If you now edit the file inside the container
 
 ```
 # container

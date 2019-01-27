@@ -2,7 +2,6 @@ FROM ubuntu:bionic
 
 MAINTAINER Matthew Feickert <matthewfeickert@users.noreply.github.com>
 
-ENV HOME /root
 WORKDIR /root
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -20,9 +19,11 @@ RUN apt-get -y -qq update && \
         vim \
         emacs \
         git \
-        libgl1-mesa-glx && \
+        libgl1-mesa-glx \
+        sudo && \
     apt-get -y autoclean && \
-    apt-get -y autoremove
+    apt-get -y autoremove && \
+    rm -rf /var/lib/apt/lists/*
 
 
 RUN echo ""  >> ~/.bashrc \
@@ -31,15 +32,16 @@ RUN echo ""  >> ~/.bashrc \
     && echo "export LANG=C.UTF-8" >> ~/.bashrc
 
 # Install miniconda
-RUN wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh && \
-    bash miniconda.sh -b -p $HOME/miniconda && \
+RUN cd /opt && \
+    wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh && \
+    bash miniconda.sh -b -p /opt/miniconda && \
     echo ""  >> ~/.bashrc && \
     echo "# added by Miniconda3 installer"  >> ~/.bashrc && \
-    echo 'export PATH="/root/miniconda/bin:$PATH"' >> ~/.bashrc && \
+    echo 'export PATH="/opt/miniconda/bin:$PATH"' >> ~/.bashrc && \
     rm miniconda.sh
 
 # Create DAMLA environment
-ENV PATH /root/miniconda/bin:$PATH
+ENV PATH /opt/miniconda/bin:$PATH
 ADD environment.yml environment.yml
 RUN conda config --set always_yes yes && \
     conda update -n base -c defaults -q conda && \
@@ -61,7 +63,7 @@ RUN source activate DAMLA && \
     conda install pytorch-cpu -c pytorch && \
     pip install git+https://github.com/dkirkby/MachineLearningStatistics#egg=mls && \
     conda clean -ilts && \
-    source deactivate
+    conda deactivate
 
 # Have Jupyter notebooks launch without command line options
 RUN source activate DAMLA && \
@@ -70,19 +72,31 @@ RUN source activate DAMLA && \
     sed -i -e "/custom_display_url/ a c.NotebookApp.custom_display_url = \'http://localhost:8888\'" ~/.jupyter/jupyter_notebook_config.py && \
     sed -i -e "/c.NotebookApp.ip/ a c.NotebookApp.ip = '0.0.0.0'" ~/.jupyter/jupyter_notebook_config.py && \
     sed -i -e "/open_browser/ a c.NotebookApp.open_browser = False" ~/.jupyter/jupyter_notebook_config.py && \
-    source deactivate
+    conda deactivate
 
 RUN conda config --set always_yes no
 
-RUN rm -rf /root/src
-
-RUN echo ". /root/miniconda/etc/profile.d/conda.sh" >> ~/.bashrc && \
+RUN echo ". /opt/miniconda/etc/profile.d/conda.sh" >> ~/.bashrc && \
     echo ""  >> ~/.bashrc && \
     echo "# have DAMLA be default environment"  >> ~/.bashrc && \
     echo "conda activate DAMLA" >> ~/.bashrc
 
-WORKDIR ${HOME}/data
-VOLUME ["/root"]
+# Create user "physicist" with sudo powers
+RUN useradd -m physicist && \
+    usermod -aG sudo physicist && \
+    echo '%sudo ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers && \
+    cp /root/.bashrc /home/physicist/ && \
+    cp -r /root/.jupyter /home/physicist/ && \
+    mkdir /home/physicist/data && \
+    chown -R --from=root physicist /home/physicist
+
+WORKDIR /home/physicist/data
+#RUN chown -R --from=root physicist /home/physicist/data
+ENV HOME /home/physicist
+ENV USER physicist
+USER physicist
+# Avoid first use of sudo warning. c.f. https://askubuntu.com/a/22614/781671
+RUN touch $HOME/.sudo_as_admin_successful
 
 # Start the container inside the conda environment
 ENTRYPOINT ["/bin/bash"]
