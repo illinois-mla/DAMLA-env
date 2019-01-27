@@ -33,6 +33,7 @@ Docker image for the recommended Conda based environment for the Data Analysis a
 - [astropy](https://github.com/astropy/astropy)
 - [emcee](https://github.com/dfm/emcee)
 - [astroml](https://github.com/astroml/astroml)
+- [uproot](https://github.com/scikit-hep/uproot)
 
 ### Additional software
 

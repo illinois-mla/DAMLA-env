@@ -27,3 +27,4 @@ dependencies:
     - papermill
     - daft
     - autograd
+    - uproot
