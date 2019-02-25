@@ -88,7 +88,8 @@ RUN useradd -m physicist && \
     cp /root/.bashrc /home/physicist/ && \
     cp -r /root/.jupyter /home/physicist/ && \
     mkdir /home/physicist/data && \
-    chown -R --from=root physicist /home/physicist
+    chown -R --from=root physicist /home/physicist && \
+    chown -R --from=root physicist /opt/miniconda
 
 WORKDIR /home/physicist/data
 #RUN chown -R --from=root physicist /home/physicist/data
