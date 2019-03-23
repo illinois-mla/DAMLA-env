@@ -51,6 +51,7 @@ RUN conda config --set always_yes yes && \
 
 # This all gets run in a new shell when the DAMLA venv is activated
 # Add packages from additional channels and install mls from GitHub
+# Also ensure only one version of TensorFlow is installed
 RUN source activate DAMLA && \
     conda env list && \
     conda install -c conda-forge \
@@ -61,7 +62,9 @@ RUN source activate DAMLA && \
        emcee \
        astroml && \
     conda install pytorch-cpu -c pytorch && \
-    pip install git+https://github.com/dkirkby/MachineLearningStatistics#egg=mls && \
+    pip install --no-cache-dir git+https://github.com/dkirkby/MachineLearningStatistics#egg=mls && \
+    pip uninstall -y tensorflow && \
+    pip install --no-cache-dir 'tensorflow~=1.13.0' && \
     conda clean -ilts && \
     conda deactivate
 
