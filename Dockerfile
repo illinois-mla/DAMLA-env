@@ -2,6 +2,7 @@ FROM ubuntu:bionic
 
 MAINTAINER Matthew Feickert <matthewfeickert@users.noreply.github.com>
 
+USER root
 WORKDIR /root
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -25,7 +26,6 @@ RUN apt-get -y -qq update && \
     apt-get -y autoremove && \
     rm -rf /var/lib/apt/lists/*
 
-
 RUN echo ""  >> ~/.bashrc \
     && echo "# as this is Ubuntu use C.UTF-8"  >> ~/.bashrc \
     && echo "export LC_ALL=C.UTF-8" >> ~/.bashrc \
@@ -33,7 +33,7 @@ RUN echo ""  >> ~/.bashrc \
 
 # Install miniconda
 RUN cd /opt && \
-    wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh && \
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh && \
     bash miniconda.sh -b -p /opt/miniconda && \
     echo ""  >> ~/.bashrc && \
     echo "# added by Miniconda3 installer"  >> ~/.bashrc && \
@@ -42,7 +42,7 @@ RUN cd /opt && \
 
 # Create DAMLA environment
 ENV PATH /opt/miniconda/bin:$PATH
-ADD environment.yml environment.yml
+COPY environment.yml environment.yml
 RUN conda config --set always_yes yes && \
     conda update -n base -c defaults -q conda && \
     conda env create -f environment.yml && \
@@ -64,7 +64,7 @@ RUN source activate DAMLA && \
     conda install pytorch-cpu -c pytorch && \
     pip install --no-cache-dir git+https://github.com/dkirkby/MachineLearningStatistics#egg=mls && \
     pip uninstall -y tensorflow && \
-    pip install --no-cache-dir 'tensorflow~=1.13.0' && \
+    pip install --no-cache-dir 'tensorflow~=1.13' && \
     conda clean -ilts && \
     conda deactivate
 
@@ -95,7 +95,7 @@ RUN useradd -m physicist && \
     chown -R --from=root physicist /opt/miniconda
 
 WORKDIR /home/physicist/data
-#RUN chown -R --from=root physicist /home/physicist/data
+RUN chown -R --from=root physicist /home/physicist/data
 ENV HOME /home/physicist
 ENV USER physicist
 USER physicist
@@ -103,4 +103,4 @@ USER physicist
 RUN touch $HOME/.sudo_as_admin_successful
 
 # Start the container inside the conda environment
-ENTRYPOINT ["/bin/bash"]
+CMD ["/bin/bash"]
